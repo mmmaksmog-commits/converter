@@ -1,0 +1,190 @@
+<Border xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Margin="14" CornerRadius="18" Background="#14161B" BorderBrush="#262A33" BorderThickness="1"
+        TextElement.Foreground="#E8EAEE" TextElement.FontFamily="Segoe UI Variable Text, Segoe UI" TextElement.FontSize="13">
+  <Border.Effect>
+    <DropShadowEffect BlurRadius="26" ShadowDepth="0" Opacity="0.6" Color="Black"/>
+  </Border.Effect>
+  <Border.Resources><!--THEME--></Border.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="46"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Grid x:Name="TitleBar" Background="Transparent">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="18,0,0,0" IsHitTestVisible="False">
+        <Border Width="20" Height="20" CornerRadius="6" Background="#2FB36E" Margin="0,0,10,0">
+          <TextBlock Text="&#xE8AB;" FontFamily="{StaticResource Icons}" FontSize="11" Foreground="White"
+                     HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <TextBlock Text="Converter" FontWeight="SemiBold" FontSize="14" VerticalAlignment="Center"/>
+        <TextBlock Text="  by mysik" Foreground="#6E7584" FontSize="12" VerticalAlignment="Center" Margin="0,1,0,0"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+        <Button x:Name="MinBtn" Style="{StaticResource TitleBtn}" Content="&#xE921;" ToolTip="Свернуть"/>
+        <Button x:Name="CloseBtn" Style="{StaticResource TitleBtn}" Content="&#xE8BB;" ToolTip="Закрыть"/>
+      </StackPanel>
+    </Grid>
+
+    <Grid Grid.Row="2" Margin="16,4,16,16">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <!-- пусто: зона перетаскивания -->
+      <Grid x:Name="StateEmpty" Cursor="Hand" Background="Transparent" Margin="0,6,0,0">
+        <Rectangle x:Name="DropRect" RadiusX="18" RadiusY="18" Stroke="#3A3F4B" StrokeThickness="2" StrokeDashArray="5 4" Fill="#17191F"/>
+        <StackPanel VerticalAlignment="Center" Margin="24,0,24,20">
+          <Grid Width="104" Height="104" HorizontalAlignment="Center">
+            <Ellipse Fill="#2FB36E" Opacity="0.16" Width="104" Height="104">
+              <Ellipse.Effect>
+                <BlurEffect Radius="22"/>
+              </Ellipse.Effect>
+            </Ellipse>
+            <Border Width="84" Height="84" CornerRadius="42" Background="#1C1F26" BorderBrush="#2A2E37" BorderThickness="1"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+              <TextBlock Text="&#xE8AB;" FontFamily="{StaticResource Icons}" FontSize="32" Foreground="#2FB36E"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+          </Grid>
+          <TextBlock Text="Перетащи файлы сюда" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,18,0,6"/>
+          <TextBlock Text="или нажми, чтобы выбрать" Foreground="#8B92A0" HorizontalAlignment="Center"/>
+          <WrapPanel HorizontalAlignment="Center" Margin="0,22,0,0">
+            <Border Background="#1C1F26" CornerRadius="9" Padding="10,5" Margin="3">
+              <TextBlock Text="Видео: MP4 · WebM · GIF" FontSize="11.5" Foreground="#AEB4C0"/>
+            </Border>
+            <Border Background="#1C1F26" CornerRadius="9" Padding="10,5" Margin="3">
+              <TextBlock Text="Музыка: MP3 · FLAC · WAV" FontSize="11.5" Foreground="#AEB4C0"/>
+            </Border>
+            <Border Background="#1C1F26" CornerRadius="9" Padding="10,5" Margin="3">
+              <TextBlock Text="Картинки: JPG · PNG · WEBP" FontSize="11.5" Foreground="#AEB4C0"/>
+            </Border>
+          </WrapPanel>
+          <TextBlock Style="{StaticResource Hint}" HorizontalAlignment="Center" Margin="0,22,0,0">
+            <Run Text="Converter"/>
+            <Run x:Name="Signature" Text="by mysik" Foreground="#2FB36E" FontWeight="SemiBold" Cursor="Hand"/>
+          </TextBlock>
+        </StackPanel>
+      </Grid>
+
+      <!-- установка ffmpeg -->
+      <StackPanel x:Name="StateSetup" VerticalAlignment="Center" Visibility="Collapsed" Margin="12,0,12,40">
+        <TextBlock Text="&#xE896;" FontFamily="{StaticResource Icons}" FontSize="34" Foreground="#2FB36E" HorizontalAlignment="Center"/>
+        <TextBlock Text="Устанавливаю ffmpeg" FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,14,0,4"/>
+        <TextBlock x:Name="SetupSub" Text="" Foreground="#8B92A0" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+        <Grid Height="6" Margin="0,18,0,0">
+          <Border Background="#262A33" CornerRadius="3"/>
+          <Border x:Name="SetupBar" Background="#2FB36E" CornerRadius="3" RenderTransformOrigin="0,0.5">
+            <Border.RenderTransform>
+              <ScaleTransform ScaleX="0"/>
+            </Border.RenderTransform>
+          </Border>
+        </Grid>
+        <TextBlock Text="Это нужно один раз: ffmpeg — программа, которая и делает всю конвертацию."
+                   Style="{StaticResource Hint}" TextAlignment="Center" Margin="0,14,0,0"/>
+      </StackPanel>
+
+      <!-- файлы и настройки -->
+      <Grid x:Name="StateFiles" Visibility="Collapsed">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="4,6,0,10">
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock x:Name="FilesTitle" Text="" FontSize="16" FontWeight="SemiBold"/>
+            <TextBlock x:Name="FilesSub" Text="" Style="{StaticResource Hint}"/>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button x:Name="AddBtn" Style="{StaticResource SecondaryBtn}" Background="#1C1F26" Padding="12,8">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="&#xE710;" FontFamily="{StaticResource Icons}" FontSize="11" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                <TextBlock Text="Добавить" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Button>
+            <Button x:Name="ClearBtn" Style="{StaticResource IconBtn}" Content="&#xE74D;" ToolTip="Убрать все" Margin="6,0,0,0"/>
+          </StackPanel>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,0,-6,0">
+          <StackPanel x:Name="FileList" Margin="0,0,6,0"/>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Margin="0,8,0,0">
+          <TextBlock x:Name="MixedHint" Text="" Foreground="#F2B33D" FontSize="12" TextWrapping="Wrap" Margin="4,0,4,8" Visibility="Collapsed"/>
+          <StackPanel x:Name="OptionsPanel">
+            <TextBlock Text="ФОРМАТ" Style="{StaticResource Caption}" Margin="4,0,0,8"/>
+            <WrapPanel x:Name="FormatPanel"/>
+            <StackPanel x:Name="QualityBlock">
+              <TextBlock x:Name="QualityCaption" Text="КАЧЕСТВО" Style="{StaticResource Caption}" Margin="4,4,0,8"/>
+              <WrapPanel x:Name="QualityPanel"/>
+            </StackPanel>
+            <StackPanel x:Name="SizeBlock">
+              <TextBlock x:Name="SizeCaption" Text="РАЗМЕР" Style="{StaticResource Caption}" Margin="4,4,0,8"/>
+              <WrapPanel x:Name="SizePanel"/>
+            </StackPanel>
+          </StackPanel>
+          <Grid Margin="0,2,0,0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="FolderBtn" Style="{StaticResource RowBtn}" Background="#1C1F26">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="&#xE838;" FontFamily="{StaticResource Icons}" FontSize="15" Foreground="#C9CDD6"
+                           VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <StackPanel Grid.Column="1">
+                  <TextBlock Text="Сохранить" Foreground="#8B92A0" FontSize="11.5"/>
+                  <TextBlock x:Name="FolderText" Text="Рядом с исходными файлами" TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+                <TextBlock Grid.Column="2" Text="Изменить" Foreground="#2FB36E" VerticalAlignment="Center" Margin="10,0,0,0"/>
+              </Grid>
+            </Button>
+            <Button x:Name="ResetFolderBtn" Grid.Column="1" Style="{StaticResource IconBtn}" Content="&#xE711;" FontSize="11"
+                    ToolTip="Сохранять рядом с исходными" Margin="6,0,0,0" Visibility="Collapsed"/>
+          </Grid>
+        </StackPanel>
+      </Grid>
+
+      <Button x:Name="ConvertBtn" Grid.Row="1" Style="{StaticResource PrimaryBtn}" Margin="0,12,0,0" Visibility="Collapsed">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock x:Name="ConvertIcon" Text="&#xE8AB;" FontFamily="{StaticResource Icons}" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+          <TextBlock x:Name="ConvertText" Text="Конвертировать" FontSize="14" VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
+    </Grid>
+
+    <Border x:Name="Snack" Grid.Row="0" Grid.RowSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+            Margin="20,0,20,22" Padding="16,11" CornerRadius="12" Background="#2A2E38" BorderBrush="#363B47" BorderThickness="1"
+            Opacity="0" IsHitTestVisible="False">
+      <Border.Effect>
+        <DropShadowEffect BlurRadius="18" ShadowDepth="2" Opacity="0.5" Color="Black"/>
+      </Border.Effect>
+      <TextBlock x:Name="SnackText" Text="" TextWrapping="Wrap" MaxWidth="320"/>
+    </Border>
+
+    <Grid x:Name="Overlay" Grid.Row="0" Grid.RowSpan="3" Background="#B30B0C10" Visibility="Collapsed">
+      <Border Width="330" Background="#1E2128" CornerRadius="16" Padding="20" BorderBrush="#2E333E" BorderThickness="1"
+              VerticalAlignment="Center" HorizontalAlignment="Center">
+        <StackPanel>
+          <TextBlock x:Name="DlgTitle" Text="" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap"/>
+          <TextBlock x:Name="DlgText" Text="" Style="{StaticResource Hint}" FontSize="13" Margin="0,8,0,0"/>
+          <Grid Margin="0,18,0,0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/><ColumnDefinition Width="10"/><ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="DlgNo" Style="{StaticResource SecondaryBtn}" Background="#2A2E38" Content="Отмена"/>
+            <Button x:Name="DlgYes" Grid.Column="2" Style="{StaticResource PrimaryBtn}" Content="OK"/>
+          </Grid>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</Border>
